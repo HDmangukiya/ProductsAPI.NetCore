@@ -16,11 +16,14 @@ namespace DataLayer.Repositories
 
         public bool AddNewProduct(Product Product)
         {
+            Product.CreateTime = DateTime.Now;
             db.Products.Add(Product);
             db.SaveChanges();
             return true;
 
         }
+
+
 
         public List<Product> GetAllProducts()
         {
@@ -28,16 +31,50 @@ namespace DataLayer.Repositories
             //return db.Products.Include(x => x.Cost).ToList();
         }
 
-        public string GetAuthorById(int id)
-        {
-            //return db.Products.FirstOrDefault(x => x.ProductNumber == id).ProductNumber;
-            throw new NotImplementedException();
-        }
-
         public Product GetProduct(int id)
         {
             return db.Products.FirstOrDefault(x => x.ProductId == id);
 
+        }
+
+        public bool Remove(int id)
+        {
+            var Product = GetProduct(id);
+            if (Product == null)
+            {
+                return false;
+            }
+            db.Products.Remove(Product);
+            db.SaveChanges();
+            return true;
+
+        }
+
+        public List<Product> UpdateProduct(int id, Product Product)
+        {
+            if (this.Remove(id))
+            {
+                this.AddNewProduct(Product); // Use same functions
+                db.SaveChanges();
+                return db.Products.ToList();
+            }
+            return db.Products.ToList();
+        }
+
+
+
+
+
+
+
+
+
+
+
+        public string GetAuthorById(int id)
+        {
+            //return db.Products.FirstOrDefault(x => x.ProductNumber == id).ProductNumber;
+            throw new NotImplementedException();
         }
 
         public Product GetProductByAuthorAndYear(string author, int year)
@@ -50,28 +87,6 @@ namespace DataLayer.Repositories
             throw new NotImplementedException();
         }
 
-        public bool Remove(int id)
-        {
-            var book = GetProduct(id);
-            if (book == null)
-            {
-                return false;
-            }
-            db.Products.Remove(book);
-            db.SaveChanges();
-            return true;
-
-        }
-
-        public List<Product> UpdateProduct(int id, Product Product)
-        {
-            if (this.Remove(id))
-            {
-                this.AddNewProduct(Product);
-                db.SaveChanges();
-                return db.Products.ToList();
-            }
-            return db.Products.ToList();
-        }
+       
     }
 }

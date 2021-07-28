@@ -31,7 +31,7 @@ namespace ProductApi.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetAllProducts()
         {
-            //return books;
+            //return Products;
             return products.GetAllProducts();
         }
 
@@ -62,6 +62,43 @@ namespace ProductApi.Controllers
             }
             return Ok(product);
         }
+
+
+
+        //use ([FromForm] Product Product) when using UI
+        [HttpPost]
+        public ActionResult<Product> PostProduct(Product Product)
+        {
+            if (products.AddNewProduct(Product))
+            {
+                return Product;
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<IEnumerable<Product>> DeleteProduct(int id)
+        {
+
+            if (products.Remove(id))
+            {
+                return products.GetAllProducts();
+            }
+            return NotFound();
+        }
+
+        //use (int id, [FromForm]Product Product) when using UI
+        [HttpPut("{id}")]
+        public ActionResult<IEnumerable<Product>> UpdateProduct(int id, Product Product)
+        {
+            var uProduct = products.UpdateProduct(id, Product);
+            if (uProduct != null)
+            {
+                return uProduct;
+            }
+            return NotFound();
+        }
+
 
     }
 }
