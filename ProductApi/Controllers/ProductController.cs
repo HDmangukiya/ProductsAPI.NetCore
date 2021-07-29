@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DataLayer;
-using DataLayer.Interface;
 
 namespace ProductApi.Controllers
 {
@@ -20,28 +19,14 @@ namespace ProductApi.Controllers
         /// Dependency Injection, For Product controller works I have added IproductRepository
         /// </summary>
         private IProductRepository products;
-        //private ILoggerManager _logger;
 
-        //public ProductController(IProductRepository _products, ILoggerManager logger)
         public ProductController(IProductRepository _products)
         {
             this.products = _products;
-            //_logger = logger;
 
         }
 
-
-
-
-
-        //[HttpGet]
-        //public ActionResult<IEnumerable<Product>> GetAllProducts()
-        //{
-        //    //return Products;
-        //    return products.GetAllProducts();
-        //}
-        
-        
+        // GET: api/Product/
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetAllProducts()
         {
@@ -58,6 +43,7 @@ namespace ProductApi.Controllers
 
         }
 
+        // GET: api/Product/5
         [HttpGet("{id}")]
         public ActionResult<Product> GetProduct(int id)
         {
@@ -72,9 +58,7 @@ namespace ProductApi.Controllers
         }
 
 
-
-        //[System.Web.Http.HttpGet("{id}")]
-
+        // GET: api/Product/5
         public ActionResult Get(int id)
         {
             //var product = products.FirstOrDefault(x => x.ProductId == id);
@@ -87,6 +71,7 @@ namespace ProductApi.Controllers
         }
 
 
+        // POST: api/Product
         [HttpPost]
         public async Task<IActionResult> PostProduct(Product Prod)
         {
@@ -99,7 +84,7 @@ namespace ProductApi.Controllers
             return Ok(Prod);
         }
 
-
+        //// DELETE: api/Product/5
         [HttpDelete("{id}")]
         public ActionResult<IEnumerable<Product>> DeleteProduct(int id)
         {
@@ -111,6 +96,7 @@ namespace ProductApi.Controllers
             return NotFound();
         }
 
+        // PUT: api/Product/5
         //use (int id, [FromForm]Product Product) when using UI
         [HttpPut("{id}")]
         public ActionResult<IEnumerable<Product>> UpdateProduct(int id, Product Product)

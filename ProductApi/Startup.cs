@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer;
-using DataLayer.Interface;
 using DataLayer.Models;
 using DataLayer.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using NLog;
 
 namespace ProductApi
@@ -44,6 +44,11 @@ namespace ProductApi
             var connection = @"Data Source=.;Initial Catalog=Product;Integrated Security=True";
             services.AddDbContext<ProductContext>
                 (options => options.UseSqlServer(connection));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStoreAPI", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +57,7 @@ namespace ProductApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
 
             app.UseHttpsRedirection();
@@ -71,6 +77,14 @@ namespace ProductApi
                 var context = serviceScope.ServiceProvider.GetRequiredService<ProductContext>();
                 context.Database.EnsureCreated();
             }
+
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductApi v1"));
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductApi v1");
+            //    c.RoutePrefix = string.Empty;
+            //});
         }
     }
 }
