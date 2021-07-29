@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataLayer
 {
@@ -11,8 +12,12 @@ namespace DataLayer
             new Product { ProductId = 1, ProductName = "The Girl on the Train", ProductNumber = "Hawkins, Paula"},
             new Product { ProductId = 2, ProductName = "Rogue Lawyer", ProductNumber = "Grisham, John"}
         };
+        public bool AddNewProduct(Product Product)
+        {
+            throw new NotImplementedException();
+        }
 
-        public List<Product> GetAllProducts()
+        public List<Product> GetAllProduct()
         {
             return products;
         }
@@ -28,12 +33,6 @@ namespace DataLayer
 
 
 
-
-
-        public bool AddNewProduct(Product Product)
-        {
-            throw new NotImplementedException();
-        }
 
 
         public string GetAuthorById(int id)
@@ -57,6 +56,16 @@ namespace DataLayer
         }
 
         public List<Product> UpdateProduct(int id, Product Product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Product> GetAllProducts()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResponse<int>> IProductRepository.AddNewProduct(Product Product)
         {
             throw new NotImplementedException();
         }

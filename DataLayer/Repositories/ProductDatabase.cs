@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataLayer.Repositories
 {
@@ -14,13 +15,23 @@ namespace DataLayer.Repositories
             this.db = _db;
         }
 
-        public bool AddNewProduct(Product Product)
+        //public bool AddNewProduct(Product Product)
+        //{
+        //    Product.CreateTime = DateTime.Now;
+        //    db.Products.Add(Product);
+        //    db.SaveChanges();
+        //    return true;
+
+        //}
+
+        public async Task<ServiceResponse<int>> AddNewProduct(Product Product)
         {
+            ServiceResponse<int> serviceResponse = new ServiceResponse<int>();
             Product.CreateTime = DateTime.Now;
             db.Products.Add(Product);
             db.SaveChanges();
-            return true;
-
+            serviceResponse.Data = Product.ProductId;
+            return serviceResponse;
         }
 
 
@@ -50,15 +61,32 @@ namespace DataLayer.Repositories
 
         }
 
+        //public List<Product> UpdateProduct(int id, Product Product)
+        //{
+        //    if (this.Remove(id))
+        //    {
+        //        this.AddNewProduct(Product); // Use same functions
+        //        db.SaveChanges();
+        //        return db.Products.ToList();
+        //    }
+        //    return db.Products.ToList();
+        //}
+
         public List<Product> UpdateProduct(int id, Product Product)
         {
-            if (this.Remove(id))
             {
-                this.AddNewProduct(Product); // Use same functions
-                db.SaveChanges();
-                return db.Products.ToList();
+
+                    var uProduct = db.Products.FirstOrDefault(x => x.ProductId == id);
+
+                    //uProduct.ProductId = Product.ProductId;
+                    uProduct.ProductName = Product.ProductName;
+                    uProduct.ProductNumber = Product.ProductNumber;
+                    uProduct.CreateTime = DateTime.Now;
+                    db.SaveChanges();
+                    return db.Products.ToList();
+                
+                //return db.Products.ToList();
             }
-            return db.Products.ToList();
         }
 
 
@@ -87,6 +115,6 @@ namespace DataLayer.Repositories
             throw new NotImplementedException();
         }
 
-       
+
     }
 }

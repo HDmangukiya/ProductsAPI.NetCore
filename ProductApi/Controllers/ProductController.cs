@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DataLayer;
+using DataLayer.Interface;
 
 namespace ProductApi.Controllers
 {
@@ -19,20 +20,42 @@ namespace ProductApi.Controllers
         /// Dependency Injection, For Product controller works I have added IproductRepository
         /// </summary>
         private IProductRepository products;
+        //private ILoggerManager _logger;
+
+        //public ProductController(IProductRepository _products, ILoggerManager logger)
         public ProductController(IProductRepository _products)
         {
             this.products = _products;
+            //_logger = logger;
+
         }
 
 
 
 
 
+        //[HttpGet]
+        //public ActionResult<IEnumerable<Product>> GetAllProducts()
+        //{
+        //    //return Products;
+        //    return products.GetAllProducts();
+        //}
+        
+        
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetAllProducts()
         {
-            //return Products;
-            return products.GetAllProducts();
+            try
+            {
+                //return Products;
+                return products.GetAllProducts();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+
         }
 
         [HttpGet("{id}")]
@@ -64,17 +87,18 @@ namespace ProductApi.Controllers
         }
 
 
-
-        //use ([FromForm] Product Product) when using UI
         [HttpPost]
-        public ActionResult<Product> PostProduct(Product Product)
+        public async Task<IActionResult> PostProduct(Product Prod)
         {
-            if (products.AddNewProduct(Product))
+            ServiceResponse<int> serviceResponse = await products.AddNewProduct(Prod);
+            if (!serviceResponse.Success)
             {
-                return Product;
+                ModelState.AddModelError("", serviceResponse.Message);
+                return BadRequest();
             }
-            return BadRequest();
+            return Ok(Prod);
         }
+
 
         [HttpDelete("{id}")]
         public ActionResult<IEnumerable<Product>> DeleteProduct(int id)

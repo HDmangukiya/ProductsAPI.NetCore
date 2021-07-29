@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataLayer
 {
@@ -9,7 +10,8 @@ namespace DataLayer
         List<Product> GetAllProducts();
         Product GetProduct(int id);
 
-        bool AddNewProduct(Product Product);
+        Task<ServiceResponse<int>> AddNewProduct(Product Product);
+        //bool AddNewProduct(Product Product);
         bool Remove(int id);
         List<Product> UpdateProduct(int id, Product Product);
 

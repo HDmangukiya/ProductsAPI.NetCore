@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.Interface;
 using DataLayer.Models;
 using DataLayer.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace ProductApi
 {
@@ -21,6 +24,7 @@ namespace ProductApi
     {
         public Startup(IConfiguration configuration)
         {
+            //LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -29,6 +33,10 @@ namespace ProductApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddSingleton<ILoggerManager, LoggerManager>();
+
+
+
             //services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductRepository, ProductDatabase>(); // Dependency Injection
 
