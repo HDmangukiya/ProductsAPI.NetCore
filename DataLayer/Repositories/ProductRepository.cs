@@ -30,7 +30,14 @@ namespace DataLayer
             return product;
         }
 
+        public List<Product> GetByProductName(string nameSubstring)
+        {
+            return GetAllProduct()
+                .Where(prod => prod.ProductName
+                    .IndexOf(nameSubstring, 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+                .ToList();
 
+        }
 
 
 

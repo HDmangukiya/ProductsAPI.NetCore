@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -16,11 +17,40 @@ namespace ProductApi
             CreateHostBuilder(args).Build().Run();
         }
 
+        // uses Generic Host in .NET Core 3.x
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            //.ConfigureAppConfiguration((ctx, builder) =>
+            //{
+            //    var keyVaultEndpoint = GetKeyVaultEndpoint();
+            //    if (!string.IsNullOrEmpty(keyVaultEndpoint))
+            //    {
+            //        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            //        var keyVaultClient = new KeyVaultClient(
+            //            new KeyVaultClient.AuthenticationCallback(
+            //                azureServiceTokenProvider.KeyVaultTokenCallback));
+            //        builder.AddAzureKeyVault(
+            //            keyVaultEndpoint, keyVaultClient, new DefaultKeyVaultSecretManager());
+            //    }
+            //}
+            //)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+            .ConfigureLogging(logging =>
+            {
+                // clear default logging providers
+                logging.ClearProviders();
+
+                // add built-in providers manually, if desired 
+                logging.AddConsole();
+                logging.AddDebug();
+                logging.AddEventLog();
+                logging.AddEventSourceLogger();
+            });
+
+
+        private static string GetKeyVaultEndpoint() => "https://VAULT_NAME.vault.azure.net/";
     }
 }

@@ -21,5 +21,7 @@ namespace DataLayer
 
         Product GetProductByAuthorAndYear(string author, int year);
 
+        List<Product> GetByProductName(string nameSubstring);
+
     }
 }

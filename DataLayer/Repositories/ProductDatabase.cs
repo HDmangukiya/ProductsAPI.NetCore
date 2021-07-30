@@ -84,12 +84,17 @@ namespace DataLayer.Repositories
                     uProduct.CreateTime = DateTime.Now;
                     db.SaveChanges();
                     return db.Products.ToList();
-                
-                //return db.Products.ToList();
             }
         }
 
+        public List<Product> GetByProductName(string nameSubstring)
+        {
+            return GetAllProducts()
+                .Where(prod => prod.ProductName
+                    .IndexOf(nameSubstring, 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+                .ToList();
 
+        }
 
 
 

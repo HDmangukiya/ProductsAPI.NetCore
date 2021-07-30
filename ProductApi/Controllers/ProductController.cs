@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DataLayer;
+using System.Net;
 
 namespace ProductApi.Controllers
 {
@@ -52,7 +53,7 @@ namespace ProductApi.Controllers
 
             if (product == null)
             {
-                return NotFound();
+                return NotFound("Product not found, Please Enter valid Product ID.");
             }
             return product;
         }
@@ -93,7 +94,10 @@ namespace ProductApi.Controllers
             {
                 return products.GetAllProducts();
             }
-            return NotFound();
+            return NotFound("Product not found, Please Enter valid Product ID.");
+
+
+            //return NotFound();
         }
 
         // PUT: api/Product/5
@@ -106,7 +110,19 @@ namespace ProductApi.Controllers
             {
                 return uProduct;
             }
-            return NotFound();
+            return NotFound("Product not found, Please Enter valid Product ID.");
+        }
+
+        // GET: api/Product/search?name=Wa
+        [HttpGet("Search")]
+        public IActionResult Search(string name)
+        {
+            var product = products.GetByProductName(name);
+            if (!product.Any())
+            {
+                return NotFound("Product not found with the Name you Entered");
+            }
+            return Ok(product);
         }
 
 

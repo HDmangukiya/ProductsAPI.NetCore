@@ -15,7 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using NLog;
 
 namespace ProductApi
@@ -33,10 +32,6 @@ namespace ProductApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<ILoggerManager, LoggerManager>();
-
-
-
             //services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductRepository, ProductDatabase>(); // Dependency Injection
 
@@ -45,10 +40,10 @@ namespace ProductApi
             services.AddDbContext<ProductContext>
                 (options => options.UseSqlServer(connection));
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStoreAPI", Version = "v1" });
-            });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStoreAPI", Version = "v1" });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,10 +52,15 @@ namespace ProductApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
-
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios.
+                app.UseHsts();
+            }
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
